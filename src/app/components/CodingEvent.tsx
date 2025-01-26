@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React,{ useState } from "react";
 
 export default function CodingEvent() {
   // State for showing the registration form
@@ -17,7 +17,7 @@ export default function CodingEvent() {
   });
 
   // Handle form input change
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
