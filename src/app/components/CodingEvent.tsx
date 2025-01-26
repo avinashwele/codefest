@@ -26,11 +26,11 @@ export default function CodingEvent() {
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form Submitted", formData);
-    // Add your form submission logic here
-  };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   console.log("Form Submitted", formData);
+  //   // Add your form submission logic here
+  // };
 
   return (
     <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between p-6 lg:p-16 gap-8">
@@ -125,7 +125,8 @@ export default function CodingEvent() {
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">
               Registration Form
             </h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            {/* <form onSubmit={handleSubmit} className="space-y-4"> */}
+            <form className="space-y-4">
               <div>
                 <label
                   htmlFor="name"
