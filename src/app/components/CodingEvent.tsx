@@ -1,36 +1,70 @@
 "use client";
+import { useState } from 'react';
 
-import React,{ useState } from "react";
+interface RegistrationFormData {
+  name: string;
+  email: string;
+  college_name: string;
+  branch: string;
+  year: string;
+  mobile_no: string;
+}
 
-export default function CodingEvent() {
-  // State for showing the registration form
+const RegistrationForm = () => {
   const [showForm, setShowForm] = useState(false);
-
-  // State for form inputs
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    college_name: "",
-    branch: "",
-    year: "",
-    mobile_no: "",
+  
+  const [formData, setFormData] = useState<RegistrationFormData>({
+    name: '',
+    email: '',
+    college_name: '',
+    branch: '',
+    year: '',
+    mobile_no: '',
   });
-
-  // Handle form input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      const { name, value } = e.target;
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    };
+
+  const [message, setMessage] = useState<string>('');
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle form submission
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   console.log("Form Submitted", formData);
-  //   // Add your form submission logic here
-  // };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setMessage('Registration successful!');
+        setFormData({
+          name: '',
+          email: '',
+          college_name: '',
+          branch: '',
+          year: '',
+          mobile_no: '',
+        });
+      } else {
+        setMessage(`Error: ${data.error}`);
+      }
+    } catch (error) {
+      setMessage('An error occurred. Please try again.');
+    }
+  };
 
   return (
     <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between p-6 lg:p-16 gap-8">
@@ -125,8 +159,8 @@ export default function CodingEvent() {
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">
               Registration Form
             </h2>
-            {/* <form onSubmit={handleSubmit} className="space-y-4"> */}
-            <form className="space-y-4">
+            {/* <form  className="space-y-4"> */}
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label
                   htmlFor="name"
@@ -254,9 +288,13 @@ export default function CodingEvent() {
                 </button>
               </div>
             </form>
+            {message && <p className='text-center p-4 text-green-600'>{message}</p>}
           </div>
         </div>
       )}
     </div>
+    
   );
-}
+};
+
+export default RegistrationForm;
